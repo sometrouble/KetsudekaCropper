@@ -6,28 +6,37 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=320, minimum-scale=1.0, maximum-scale=2.0" />
 		<style type="text/css">
+			*{
+			}
+			
 			body{
-				font-family: Meiryo;
+				font-family: 'Hiragino Kaku Gothic ProN',meiryo,arial,sans-serif;
 				font-style: thin;
 				font-size: 16px
 					color: 222222;
 				text-align: center;
-
 			}
+			h1{
+				margin: 1em 0 0 0;
+			}
+			
 			h2{
 				font-size: 22px;
 				font-weight: 700;
 				margin: 1.5em 1em 0 1em;
 			}
+			
 			h3{
 				font-size: 14px;
 				font-weight: 400;
 				margin: 0 0 0 0;
 			}
+			
 			h4{
 				font-size: 14px;
 				font-weight: 400;
 			}
+			
 			a{
 				text-decoration: none;
 			}
@@ -60,8 +69,10 @@
 				display: block;
 				padding: 15px 0 15px;
 				border: none;
-				margin: 50px auto 200px auto;
+				margin: 50px auto 50px auto;
 				transition: all  0.3s ease;
+
+				-webkit-appearance: none;
 			}
 
 			.twitter:hover{
@@ -75,6 +86,23 @@
 
 			.ketsucrop:hover{
 				background-color: deeppink;
+			}
+			
+			.ketsuadd{
+				background: lightgreen;
+			}
+
+			.ketsuadd:hover{
+				background-color: greenyellow;
+			}
+			
+			.optionbtn{
+				background: #666;
+				margin-bottom: 150px;
+			}
+
+			.optionbtn:hover{
+				background-color: #222;
 			}
 
 			.icon{
@@ -120,13 +148,44 @@
 				z-index: 1;
 			}
 
-			.img{
+			img{
+				width: 80%;
 				max-width: 640px;
+				margin: 0 auto;
 			}
 			
 			canvas{
 				margin-top: 50px;
 			}
+			
+			#ketsusource{
+				background: skyblue;
+			}
+			
+			.optionsettings{
+				display: none;
+				color: white;
+				padding: 50px 0 50px 0;
+				background: #222;
+				
+			}
+			
+			.optionsettings p{
+				margin-top: 2em;
+				margin-bottom: 2em;
+			}
+			
+			.optionepisode{
+				display: none;
+				padding: 50px 0 50px 0;
+				background: #444;
+			}
+
+			.optionepisode > select{
+				width: 50%;
+				height: 50px;
+			}
+
 
 		</style>
 
@@ -144,23 +203,56 @@
 
 		<!-- お借りしました ドカベンCSS https://totoraj930.github.io/dokaben-css/ -->
 		<h1 class="dokaben dkbn-loop dkbn-text">KETSUDEKA CROPPER</h1>
+		<h5>version1.0.0</h5>
+		
 
-		<h4>お尻の大きな女の子を全年齢向けにします。</h4>
+		<h4>ケツデカピングーの両端を切り落として全年齢向けにします。</h4>
 
 		<div id = "ketsusource">
 			<p>元画像</p>
-			<input type="file" id="selfketsu"><br><br/>
+			<input type="file" id="selfketsu"><br>
 		</div>
-		<div id = "ketsudist">
-			
-		</div>
-		<canvas id="canvas"></canvas>
 		
-
+		<div id = "ketsudist"></div>
+		
+		<canvas id="canvas" width="0px" height="0px"></canvas><br>
+		
+		<img id="pngImage">
 		<div class="cle"></div>
+
+
 
 		<input type="button" value="Crop!" class="twitter ketsucrop" onclick="ketsucrop(dataurl)">
 		<!--input type="button" value="Tweet" class="twitter" onclick="tweetpost()"-->
+		
+		<div class="optionsettings">
+		
+			<p>--- Option ---</p>
+			
+			
+			<div id="faction">
+				<input type="radio" name="faction" value="crop" checked="checked">端っこを切り落とす
+				<input type="radio" name="faction" value="add">端っこをくっつける
+			</div>
+			
+			<div class="optionepisode">
+				<p>話数選択</p>
+				<select id="episode" name="episode">
+					<option value="1">第1話 ケツデカ課長の淫夢</option>
+					<option value="2">第2話 ピンガ生誕</option>
+					<option value="3">第3話 ケツデカピングーと学校</option>
+					<option value="4">第4話 ケツデカとアコーディオン</option>
+					<option value="5">第5話 ケツデカのつららで音楽</option>
+					<option value="6">第6話 ケツデカのガールフレンド</option>
+					<option value="7">第7話 ケツデカピングーとトイレ</option>
+					<option value="8">第8話 ケツデカのポップコーンづくり</option>
+				</select>
+			</div>
+			
+		</div>
+		
+		
+		<input type="button" value="Option" class="twitter optionbtn" onclick="optiontoggle()">
 
 		<div class="footer">
 			<h3>Developer</h3>
@@ -174,8 +266,20 @@
 		<script type="text/javascript">
 			
 			var obj1 = document.getElementById("selfketsu");
+			var obj2 = document.getElementById("faction");
+			var obj3 = document.getElementById("episode");
+			
 			var dataurl = null;
+			
+			var togglebool = 0;
+			var episodenum = 1;
+			
 
+			var canvas = document.getElementById('canvas');
+			var ctx = canvas.getContext('2d');
+
+			
+			//画像ファイルに変更があれば呼ばれるイベントリスナ
 			obj1.addEventListener("change", function(evt){
 				var file = evt.target.files;
 				var reader = new FileReader();
@@ -189,18 +293,31 @@
 				}
 			},false);
 			
+			//ラジオボタンに変更があれば呼ばれるイベントリスナ
+			obj2.addEventListener("change", function(){
+				episodetoggle();
+				
+				if( $('input[value=add]:eq(0)').is(':checked') ){
+					$(".ketsucrop").replaceWith('<input type="button" value="Recover!" class="twitter ketsuadd" onclick="ketsuadd(dataurl)">');
+				}
+				
+				
+			});
+			
+			//選択リストに変更があれば呼ばれるイベントリスナ
+			obj3.addEventListener("change", function(){
+				
+				//リストの値を取得
+				episodenum = $('#episode').val();
+				
+			});
+			
+			//端っこの切り落としをする関数
 			function ketsucrop (imgsrc){
 
-				
-				//var TRIM_SIZE = 300;
-				var canvas = document.getElementById('canvas');
-				var ctx = canvas.getContext('2d');
-				
 					if (canvas.getContext) {
 						var image = new Image();
 						image.src = dataurl;
-						
-						
 						
 						var width = image.width;
 						var height = image.height;
@@ -221,18 +338,86 @@
 							canvas.width = castration;
 							canvas.height = height;
 
+							//一時的にcanvasに描画する
 							ctx.drawImage(image, cropwidth, 0, castration, height, 0, 0, castration, height);
+							
+							//canvasの内容をpng画像に変換しimgタグ内に描画
+							var png = canvas.toDataURL();
+							document.getElementById("pngImage").src = png;
+							
+							//canvas内容を削除
+							ctx.clearRect(0, 0, width, height);
+							canvas.height="0";
+							
 						}
 					}
 			}
+			
+			function ketsuadd (imgsrc){
 
-			/*function tweetpost(){
-				var s;	//message
+				//比率を固定するために一度切り抜く
+				if (canvas.getContext) {
+					var image = new Image();
+					image.src = dataurl;
+
+					var width = image.width;
+					var height = image.height;
+
+					var castration = width;
+					var x = 0;
+
+					var resultwidth;
+					var cropwidth;
+
+					var addimageL = new Image();
+					var addimageR = new Image();
+					
+					//計算処理
+					if(width != 0 || height != 0){
+
+						//縦横比が4:6になるよう調整する
+						castration = (height / 4) * 6;
+						cropwidth = (width-castration)/2;
+
+						addimageL.src = "./assets/images/ketsu"+ episodenum +"L.png";
+						addimageR.src = "./assets/images/ketsu"+ episodenum +"R.png";
+						
+						addimageL.addEventListener('load', function() {
+							addimageR.addEventListener('load', function() {
+
+								canvas.width = castration+(addimageL.width*2);
+								canvas.height = height;
+
+								//一時的にcanvasに描画する
+								ctx.drawImage(image, cropwidth, 0, castration, height, addimageL.width, 0, castration, height);
+								ctx.drawImage(addimageL, 0, 0);
+								ctx.drawImage(addimageR, addimageL.width+castration, 0);
+
+
+
+								//canvasの内容をpng画像に変換しimgタグ内に描画
+								var png = canvas.toDataURL();
+								document.getElementById("pngImage").src = png;
+
+								//canvas内容を削除
+								ctx.clearRect(0, 0, width, height);
+								canvas.height="0";
+								
+							});
+						});
+
+					}
+				}
+				
+			}
+
+			function tweetpost(){
+				var s;	//Tweet内容を格納する変数
 				var EUC = encodeURIComponent;
 				var twitter_url = "http://twitter.com/?status=";
 
-				//message
-				s = KETSUDEKA CROPPER;
+				//Tweet内容
+				s = "KETSUDEKA CROPPER";
 
 				if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('iPad') > 0 || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
 					location.href = 'https://twitter.com/intent/tweet?text=' + EUC(s);
@@ -240,7 +425,17 @@
 					window.open(twitter_url + EUC(s), "_blank","top=50,left=50,width=500,height=500,scrollbars=1,location=0,menubar=0,toolbar=0,status=1,directories=0,resizable=1");
 				}
 
-			}*/
+			}
+			
+			function optiontoggle(){
+				$('.optionsettings').slideToggle('slow');
+			}
+			
+			function episodetoggle(){
+				$('.optionepisode').slideToggle('slow');
+			}
+
+			
 		</script>
 	</body>
 </html>
