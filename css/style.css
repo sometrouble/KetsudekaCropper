@@ -1,0 +1,183 @@
+body{
+	font-family: Meiryo;
+	font-style: thin;
+	font-size: 16px
+	color: #222222;
+	text-align: center;
+
+	/*initialize*/
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+h1{
+	font-family: Meiryo;
+	font-weight: 100;
+	font-size: 32px;
+}
+
+h2{
+	font-size: 22px;
+	font-weight: 700;
+	margin: 1.5em 1em 0 1em;
+}
+
+h3{
+	font-size: 14px;
+	font-weight: 400;
+	margin: 0 0 0 0;
+}
+
+h4{
+    font-size: 14px;
+    font-weight: 400;
+}
+
+a{
+	text-decoration: none;
+}
+a:link{
+	transition: 0.5s;
+}
+a.glay:link{
+	color: #ffffff;
+}
+a:visited{
+	color: #ffffff;
+}
+a:hover{
+	transition: 0.5s;
+	color: #444444;
+}
+a:active{
+	color: #ffffff;
+}
+
+.twitter{
+	background-color: #0084B4;
+	background: rgba(0,132,180,.8);	
+	font-size: 16px;
+	color: #FFFFFF;
+	width: 300px;
+	border-radius: 4px;
+	border: 1px solid transparent;
+	text-decoration:none;
+	text-align: center;
+	display: block;
+	padding: 15px 0 15px;
+	border: none;
+	margin: 0 auto 100px auto;
+	transition: all  0.3s ease;
+}
+.twitter:hover{
+	transition: all  0.3s ease;
+	background-color: #006292;
+}
+
+.icon{
+	border-radius: 50px;
+	padding: 5px;
+	margin: 50px 0 50px 0;
+}
+
+.topbar{
+	width: 100%;
+	height: 40px;
+	text-align: center;
+	margin: 0;
+	-webkit-box-shadow: 0 10px 6px -6px #777;
+		-moz-box-shadow: 0 10px 6px -6px #777;
+		box-shadow: 0 10px 6px -6px #777;
+}
+
+.tweetbutton{
+	position: absolute;
+	right: 1em;
+	top: 1em;
+}
+
+.header{
+	text-align: left;
+	position: fixed;
+	background-color: #222222;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 45px;
+}
+
+.footer{
+	position: fixed;
+	bottom: 0px;
+	background-color: #222222;
+	width: 100%;
+	height: 32px;
+	line-height: 32px;
+}
+
+.backgroundimg{
+	/*padding-top: 32px;*/
+	margin-top: 45px;
+	height: 100%;
+	background-size: cover;
+	background-position: center center;
+	background-attachment: fixed;
+	background-color: #888888;
+	background-image: url("../assets/images/bg_001.jpg")
+}
+
+.contents{
+}
+
+.backgroundbox{
+	background-color: rgba(0,0,0,0.5);
+	padding: 10px;
+}
+
+.button {
+	background-color: transparent;
+	border: 3px solid #fff;
+	color: #fff;
+	line-height: 50px;
+	padding: 10px 64px 10px 64px;
+}
+.button:hover {
+	background-color: rgba(255, 255, 255, .2);
+}
+.button::before,
+.button::after {
+	position: absolute;
+	z-index: -1;
+	display: block;
+	content: '';
+}
+.button,
+.button::before,
+.button::after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+.totop {
+	position:fixed;
+	bottom:50px;
+	right:15px;
+}
+.totop a {
+	display:block;
+	text-decoration:none;
+}
+.totop img {
+	transition: all 0.2s;
+	border-radius: 5px;
+	background:#111;
+}
+.totop img:hover {
+	transition: all 0.2s;
+	background:#333;
+}

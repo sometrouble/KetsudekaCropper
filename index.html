@@ -1,0 +1,246 @@
+
+<html>
+	<head>
+		<title>KETSUDEKA CROPPER</title>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=320, minimum-scale=1.0, maximum-scale=2.0" />
+		<style type="text/css">
+			body{
+				font-family: Meiryo;
+				font-style: thin;
+				font-size: 16px
+					color: 222222;
+				text-align: center;
+
+			}
+			h2{
+				font-size: 22px;
+				font-weight: 700;
+				margin: 1.5em 1em 0 1em;
+			}
+			h3{
+				font-size: 14px;
+				font-weight: 400;
+				margin: 0 0 0 0;
+			}
+			h4{
+				font-size: 14px;
+				font-weight: 400;
+			}
+			a{
+				text-decoration: none;
+			}
+			a:link{
+			}
+			a.glay:link{
+				color: #8899a6;
+			}
+			a:visited{
+				color: #8899a6;
+			}
+			a:hover{
+				color: #8899a6;
+				text-decoration: underline;
+			}
+			a:active{
+				color: #8899a6;
+			}
+
+			.twitter{
+				background-color: #0084B4;
+				background: rgba(0,132,180,.8);	
+				font-size: 16px;
+				color: #FFFFFF;
+				width: 300px;
+				border-radius: 4px;
+				border: 1px solid transparent;
+				text-decoration:none;
+				text-align: center;
+				display: block;
+				padding: 15px 0 15px;
+				border: none;
+				margin: 50px auto 200px auto;
+				transition: all  0.3s ease;
+			}
+
+			.twitter:hover{
+				transition: all  0.3s ease;
+				background-color: #006292;
+			}
+
+			.ketsucrop{
+				background: plum;
+			}
+
+			.ketsucrop:hover{
+				background-color: deeppink;
+			}
+
+			.icon{
+				border-radius: 10px;
+				padding: 5px;
+			}
+
+			.topbar{
+				background-color: #444;
+				width: 100%;
+				height: 40px;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+				-webkit-box-shadow: 0 10px 6px -6px #777;
+				-moz-box-shadow: 0 10px 6px -6px #777;
+				box-shadow: 0 10px 6px -6px #777;
+			}
+
+			.tweetbutton{
+				position: absolute;
+				right: 1em;
+				top: 1em;
+			}
+
+			.header{
+				left: 0;
+				position: absolute;
+				width: 100%;
+				height: 250px;
+				margin: 0 auto;
+				z-index: -1;
+			}
+
+			.footer{
+				position: fixed;
+				bottom: 0px;
+				background-color: #222222;
+				color: white;
+				width: 100%;
+				height: 80px;
+				line-height: 32px;
+				z-index: 1;
+			}
+
+			.img{
+				max-width: 640px;
+			}
+			
+			canvas{
+				margin-top: 50px;
+			}
+
+		</style>
+
+		<link rel="stylesheet" href="./css/dokaben.css">
+
+	</head>
+
+	<body>
+		<div class="topbar">
+			<div class="tweetbutton">
+				<a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="KETSUDEKA_CROPPER">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+			</div>
+		</div>
+
+
+		<!-- お借りしました ドカベンCSS https://totoraj930.github.io/dokaben-css/ -->
+		<h1 class="dokaben dkbn-loop dkbn-text">KETSUDEKA CROPPER</h1>
+
+		<h4>お尻の大きな女の子を全年齢向けにします。</h4>
+
+		<div id = "ketsusource">
+			<p>元画像</p>
+			<input type="file" id="selfketsu"><br><br/>
+		</div>
+		<div id = "ketsudist">
+			
+		</div>
+		<canvas id="canvas"></canvas>
+		
+
+		<div class="cle"></div>
+
+		<input type="button" value="Crop!" class="twitter ketsucrop" onclick="ketsucrop(dataurl)">
+		<!--input type="button" value="Tweet" class="twitter" onclick="tweetpost()"-->
+
+		<div class="footer">
+			<h3>Developer</h3>
+			<h3><a class="glay" href="http://twitter.com/sometrouble_">@sometrouble_</a></h3>
+		</div>
+
+
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+		<script type="text/javascript">
+			
+			var obj1 = document.getElementById("selfketsu");
+			var dataurl = null;
+
+			obj1.addEventListener("change", function(evt){
+				var file = evt.target.files;
+				var reader = new FileReader();
+
+				reader.readAsDataURL(file[0]);
+
+				reader.onload = function(){
+					dataurl = reader.result;
+
+					document.getElementById("ketsusource").innerHTML = "<img src='" + dataurl + "'>";
+				}
+			},false);
+			
+			function ketsucrop (imgsrc){
+
+				
+				//var TRIM_SIZE = 300;
+				var canvas = document.getElementById('canvas');
+				var ctx = canvas.getContext('2d');
+				
+					if (canvas.getContext) {
+						var image = new Image();
+						image.src = dataurl;
+						
+						
+						
+						var width = image.width;
+						var height = image.height;
+
+						var castration = width;
+						var x = 0;
+
+						var resultwidth;
+						var cropwidth;
+
+						//計算処理
+						if(width != 0 || height != 0){
+
+							//縦横比が4:6になるよう調整する
+							castration = (height / 4) * 6;
+							cropwidth = (width-castration)/2;
+	
+							canvas.width = castration;
+							canvas.height = height;
+
+							ctx.drawImage(image, cropwidth, 0, castration, height, 0, 0, castration, height);
+						}
+					}
+			}
+
+			/*function tweetpost(){
+				var s;	//message
+				var EUC = encodeURIComponent;
+				var twitter_url = "http://twitter.com/?status=";
+
+				//message
+				s = KETSUDEKA CROPPER;
+
+				if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('iPad') > 0 || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
+					location.href = 'https://twitter.com/intent/tweet?text=' + EUC(s);
+				}else{
+					window.open(twitter_url + EUC(s), "_blank","top=50,left=50,width=500,height=500,scrollbars=1,location=0,menubar=0,toolbar=0,status=1,directories=0,resizable=1");
+				}
+
+			}*/
+		</script>
+	</body>
+</html>
