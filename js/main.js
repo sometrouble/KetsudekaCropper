@@ -136,7 +136,7 @@ function ketsuadd (imgsrc){
 					resizewidth = addimageL.height/4*6;
 
 					canvas.width = resizewidth+(addimageL.width*2);
-					canvas.height = height;
+					canvas.height = addimageL.height;
 
 					//一時的にcanvasに描画する
 					ctx.drawImage(image, cropwidth, 0, castration-5, height, addimageL.width, 0, resizewidth, addimageL.height);
