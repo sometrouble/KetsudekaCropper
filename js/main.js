@@ -10,6 +10,7 @@ var obj3 = document.getElementById("episode");
 var image = new Image();
 var addimageL = new Image();
 var addimageR = new Image();
+var compic = new Image();
 
 var dataurl = null;
 
@@ -47,6 +48,8 @@ obj2.addEventListener("change", function(){
 	episodetoggle();
 	if( $('input[value=add]:eq(0)').is(':checked') ){
 		$(".ketsucrop").replaceWith('<input type="button" value="Recover!" class="twitter ketsuadd" onclick="ketsuadd(dataurl)">');
+	} else {
+		$(".ketsuadd").replaceWith('<input type="button" value="Crop!" class="twitter ketsucrop" onclick="ketsucrop(dataurl)">');
 	}
 });
 
@@ -115,13 +118,14 @@ function ketsucrop (imgsrc){
 	}
 }
 
+//端っこをくっつける関数
 function ketsuadd (imgsrc){
 
 	//比率を固定するために一度切り抜く
 	if (canvas.getContext) {
-		
+
 		initcropper();
-		
+
 		//計算処理
 		if(width != 0 || height != 0){
 
@@ -153,8 +157,39 @@ function ketsuadd (imgsrc){
 
 }
 
+//記念撮影をする関数
+function compicshot (imgsrc){
+	
+	//比率を固定するために一度切り抜く
+	if (canvas.getContext) {
 
-//---html要素コントロール関数---
+		initcropper();
+
+		//計算処理
+		if(width != 0 || height != 0){
+
+			setaspect();
+
+			compic.src = "./assets/images/ketsudekapingu.png";
+
+			compic.addEventListener('load', function() {
+
+				canvas.width = compic.width;
+				canvas.height = compic.height;
+
+				//一時的にcanvasに描画する
+				ctx.drawImage(image, 0, 0, compic.width, compic.height, 0, 0, compic.width, compic.height);
+				ctx.drawImage(compic, 0, 0);
+
+				convertcanvas2png();
+
+			});
+
+		}
+	}
+}
+
+//---html要素コントロール関数---//
 function optiontoggle(){
 	$('.optionsettings').slideToggle('slow');
 }
