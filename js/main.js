@@ -178,7 +178,7 @@ function compicshot (imgsrc){
 				canvas.height = compic.height;
 
 				//一時的にcanvasに描画する
-				ctx.drawImage(image, 0, 0, compic.width, compic.height, 0, 0, compic.width, compic.height);
+				ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, compic.width, compic.height);
 				ctx.drawImage(compic, 0, 0);
 
 				convertcanvas2png();
